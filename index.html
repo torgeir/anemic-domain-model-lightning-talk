@@ -162,24 +162,46 @@ class: inverse
 ## Vanskelig å mocke!
 
 ---
-# Backbone.Model - Don't
-```
-var Forside = Side.extend({
-
-  parse: function (data) {
-    this.parseNøstetModell(data, 'sider', Sider);
-    return data;
-  }
-
+# Backbone.Model
+```javascript
+var Forside = Base.View.extend({
+  url: '/side'
 });
 ```
-```
+```javascript
 var forside = new Forside();
+
 forside.get('sider').push(side);
+forside.get('sider').remove(annenSide);
+
+forside.save();
 ```
 ---
-# Hva er feil? #1
+# Backbone.Model
+```javascript
+var Forside = Base.View.extend({
+  url: '/side',
+
+  leggTilSide: function (side) {
+    this.get('sider').push(side);
+  },
+
+  fjernSide: function (side) {
+    this.get('sider').remove(side);
+  }
+});
 ```
+```javascript
+var forside = new Forside();
+
+forside.leggTilSide(side);
+forside.fjernSide(annenSide);
+
+forside.save();
+```
+---
+# Hva er feil?
+```javascript
   // SomeView.js
 
   // Fjern alle omrader som har omradeId etter denne datoen
@@ -190,33 +212,15 @@ forside.get('sider').push(side);
     }),
     {silent: true});
 ```
+--
+# Forslag
+```javascript
+  trykkDatoBegrensning.fjernAndreOmråderEnn(områdeId);
+```
 ---
 class: middle, inverse
 # [Eksempel](https://github.com/Inatur/Inatur/commit/dfafd672ceecc68f9a7a972e6b2105b988553331) fra Inatur
 ---
-# Backbone.Model - Do
-
-```javascript
-var Forside = Side.extend({
-
-  parse: function (data) {
-    this.parseNøstetModell(data, 'sider', Sider);
-    return data;
-  },
-
-  sider: function () {
-    return this.get('sider');
-  },
-
-  leggTilSide: function (side) {
-    this.sider().push(side);
-  },
-
-  fjernSide: function (side) {
-    this.sider().remove(side);
-  }
-});
-```
 
 
 
