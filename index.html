@@ -219,9 +219,49 @@ forside.save();
 ```
 ---
 class: middle, inverse
-# [Eksempel](https://github.com/Inatur/Inatur/commit/dfafd672ceecc68f9a7a972e6b2105b988553331) fra Inatur
+# [Backbone-eksempel](https://github.com/Inatur/Inatur/commit/dfafd672ceecc68f9a7a972e6b2105b988553331) fra Inatur
 ---
+# Java-eksempel
+```java
+// KjopService.java
 
+private List<Kjop> filtrerKjøpsliste(List<Kjop> kjopliste, ...) {
+
+  List<Kjop> returliste = new ArrayList<>();
+
+  for (Kjop kjop: kjopliste) {
+    Date kjøpFradato = kjop.getKjoptKort().getStartDato(kjop.getKjøpsdatoer());
+    Date kjøpTildato = kjop.getKjoptKort().getSluttDato(kjop.getKjøpsdatoer());
+    ...
+  }
+
+  return returliste;
+}
+
+```
+---
+# Java-eksempel
+```java
+// KjopService.java
+
+private List<Kjop> filtrerKjøpsliste(List<Kjop> kjopliste, ...) {
+
+  List<Kjop> returliste = new ArrayList<>();
+
+  for (Kjop kjop: kjopliste) {
+    Date kjøpFradato = kjop.getStartdato();
+    Date kjøpTildato = kjop.getSluttdato();
+    ...
+  }
+
+  return returliste;
+}
+
+```
+---
+class: middle, inverse
+# [Java-eksempel](https://github.com/Inatur/Inatur/commit/4b607bb59b00ac389fd81a57145ab29900e96f0b) fra Inatur
+---
 
 
 
