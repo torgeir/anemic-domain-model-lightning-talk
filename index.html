@@ -39,6 +39,9 @@
         border-radius: 5px;
         font-size: 16px;
       }
+      .hljs-monokai pre code {
+        color: white;
+      }
       .pull-left {
         float: left;
         width: 47%;
@@ -127,25 +130,94 @@ layout: true
 class: center, middle, inverse
 
 ---
-
 # Anemic Domain Model
-
 .footnote[Martin Fowler 25. Nov 2003 [AnemicDomainModel](http://www.martinfowler.com/bliki/AnemicDomainModel.html)]
 
 ---
 layout: false
-
-# A software domain model where the domain objects contain little or no business logic
-
----
-
-## Strider mot basic OO: å kombinere data og prosess
-## Prosedural stil
+# Anemic Domain Model:<br> A software domain model where the domain objects contain little or no business logic
 
 ---
 class: middle, inverse
-
 # "People think that anemic objects are real objects, and thus completely miss the point of what object-oriented design is all about"
+
+---
+# Problemer
+## Ingen innkapsling (minimal)
+## Dumme domeneobjekter (nærmest et map av data)
+## Strider mot basic OO: å kombinere data og oppførsel
+## Procedural stil - Transaction Script (Patterns of EAA)
+
+---
+class: inverse
+# Symptomer
+## Duplisert kode
+## Vanskelig å gjenbruke
+## Uønskede avhengigheter
+
+---
+class: inverse
+# Symptomer++!
+## Vanskelig å teste!
+## Vanskelig å mocke!
+
+---
+# Backbone.Model - Don't
+```
+var Forside = Side.extend({
+
+  parse: function (data) {
+    this.parseNøstetModell(data, 'sider', Sider);
+    return data;
+  }
+
+});
+```
+```
+var forside = new Forside();
+forside.get('sider').push(side);
+```
+---
+# Hva er feil? #1
+```
+  // SomeView.js
+
+  // Fjern alle omrader som har omradeId etter denne datoen
+  trykkDatoBegrensning.set("omradeBegrensninger",
+    _.filter(trykkDatoBegrensning.get("omradeBegrensninger"),
+      function(omrade) {
+        return omrade.omradeId != omradeId;
+    }),
+    {silent: true});
+```
+---
+class: middle, inverse
+# [Eksempel](https://github.com/Inatur/Inatur/commit/dfafd672ceecc68f9a7a972e6b2105b988553331) fra Inatur
+---
+# Backbone.Model - Do
+
+```javascript
+var Forside = Side.extend({
+
+  parse: function (data) {
+    this.parseNøstetModell(data, 'sider', Sider);
+    return data;
+  },
+
+  sider: function () {
+    return this.get('sider');
+  },
+
+  leggTilSide: function (side) {
+    this.sider().push(side);
+  },
+
+  fjernSide: function (side) {
+    this.sider().remove(side);
+  }
+});
+```
+
 
 
 
